@@ -74,7 +74,7 @@ Note : I'm using terraform version 0.12 but if you're using latest version 0.15 
 
   If you're using cloud shell then you can preview you application through cloud shell web preview
 
-- $gcloud container clusters get-credentials <replace cluster name> --region <replace your deployed zone> --project <replace project id> \
+- $gcloud container clusters get-credentials replace_cluster_name --region replace_your_deployed_zone --project replace_project_id \
  && kubectl port-forward $(kubectl get pod --selector="App=myapp" --output jsonpath='{.items[0].metadata.name}') 8080:80
 
   Open your web preview.
