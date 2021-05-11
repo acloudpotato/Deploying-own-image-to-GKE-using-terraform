@@ -34,29 +34,53 @@ This is kubernetes dashboard configuration file for api calls & management of cl
 
 # Set up
 
-1. clone the repo into your machine 
+## clone the repo into your machine 
 
 - $git clone https://github.com/abhishek7389/Deploying-own-image-to-GKE-using-terraform
 
-2. Change the directory where all files are located
+## Step 1. Creating a cluster & other resources
+1. Change the directory where all files are located
 
 - $cd Deploying-own-image-to-GKE-using-terraform
 
-3. see the all configuration files & if required change it accordingly.
+2. see the all configuration files & if required change it accordingly.
 
-4. Now, initiaze the terraform in this folder & check all things are working well.
+3. Now, initiaze the terraform in this folder & check all things are working well.
 Note : I'm using terraform version 0.12 but if you're using latest version 0.15 then change required version to your version.
 
 - $terraform init
 
 - $terraform plan
 
-5. If you don't get any error then let's deploy our configuration
+4. If you don't get any error then let's deploy our configuration
 
 - $terraform apply
 
-6. After experimenting with this demo, let's clean up & destroy what we deployed.
+5. For deployment in this cluster you need credentials of cluster
 
+- $gcloud container clusters get-credentials $(terraform output -raw kubernetes_cluster_name) --region $(terraform output -raw region)
 
+## Step 2. Deploying own image to the cluster
+
+1. get the deployment file 
+
+- $ mv ../Deploying-own-image-to-GKE-using-terraform/deployment/kubernetes.tf .
+
+2. Again apply terraform
+
+- $terraform apply
+
+## Optional Step
+
+  If you're using cloud shell then you can preview you application through cloud shell web preview
+
+- $gcloud container clusters get-credentials <replace cluster name> --region <replace your deployed zone> --project <replace project id> \
+ && kubectl port-forward $(kubectl get pod --selector="App=myapp" --output jsonpath='{.items[0].metadata.name}') 8080:80
+
+  Open your web preview.
+
+  After experimenting with this demo, let's clean up & destroy what we deployed.
+
+-$terraform destroy
 
 This repo is a created with reference to the [Provision a GKE Cluster learn guide](https://learn.hashicorp.com/terraform/kubernetes/provision-gke-cluster), containing Terraform configuration files to provision an GKE cluster on GCP.
