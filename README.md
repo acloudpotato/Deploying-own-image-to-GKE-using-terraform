@@ -81,6 +81,6 @@ Note : I'm using terraform version 0.12 but if you're using latest version 0.15 
 
   After experimenting with this demo, let's clean up & destroy what we deployed.
 
--$terraform destroy
+- $terraform destroy
 
 This repo is a created with reference to the [Provision a GKE Cluster learn guide](https://learn.hashicorp.com/terraform/kubernetes/provision-gke-cluster), containing Terraform configuration files to provision an GKE cluster on GCP.
