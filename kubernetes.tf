@@ -15,7 +15,7 @@ data "terraform_remote_state" "gke" {
   backend = "local"
 
   config = {
-    path = "../learn-terraform-provision-gke-cluster/terraform.tfstate"
+    path = "../Deploying-own-image-to-GKE-using-terraform/terraform.tfstate"
   }
 }
 
