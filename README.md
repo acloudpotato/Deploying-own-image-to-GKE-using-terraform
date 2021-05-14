@@ -44,6 +44,7 @@ This is kubernetes dashboard configuration file for api calls & management of cl
 - $cd Deploying-own-image-to-GKE-using-terraform
 
 2. see the all configuration files & if required change it accordingly.
+Note: You have to put your project ID to terraform.tfvars file.
 
 3. Now, initiaze the terraform in this folder & check all things are working well.
 Note : I'm using terraform version 0.12 but if you're using latest version 0.15 then change required version to your version.
@@ -64,9 +65,15 @@ Note : I'm using terraform version 0.12 but if you're using latest version 0.15 
 
 1. get the deployment file 
 
-- $ mv ../Deploying-own-image-to-GKE-using-terraform/deployment/kubernetes.tf .
+- $ cd deployment
 
 2. Again apply terraform
+
+- $terraform init
+
+- $terraform plan
+
+Note: If you got error regarding remote cluster so you can put your cluster execution file path here.
 
 - $terraform apply
 
