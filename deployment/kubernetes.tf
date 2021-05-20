@@ -11,6 +11,7 @@ terraform {
   }
 }
 
+# Configuring path to get details for existing cluster
 data "terraform_remote_state" "gke" {
   backend = "local"
 
@@ -20,25 +21,21 @@ data "terraform_remote_state" "gke" {
 }
 
 # Retrieve GKE cluster information
-
-
-# Configure kubernetes provider with Oauth2 access token.
-# https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/client_config
-# This fetches a new token, which will expire in 1 hour.
 data "google_client_config" "default" {}
 
 data "google_container_cluster" "my_cluster" {
   name     = data.terraform_remote_state.gke.outputs.kubernetes_cluster_name
-  location = data.terraform_remote_state.gke.outputs.region
+  location = data.terraform_remote_state.gke.outputs.zone
 }
 
 provider "kubernetes" {
   host = data.terraform_remote_state.gke.outputs.kubernetes_cluster_host
 
-  token                  = data.google_client_config.default.access_token
-  cluster_ca_certificate = base64decode(data.google_container_cluster.my_cluster.master_auth[0].cluster_ca_certificate)
+  token                  = "${data.google_client_config.default.access_token}"
+  cluster_ca_certificate = "${base64decode(data.google_container_cluster.my_cluster.master_auth[0].cluster_ca_certificate)}"
 }
 
+# Deployment configuration
 resource "kubernetes_deployment" "mydeployment" {
   metadata {
     name = "my-deployment"
@@ -63,7 +60,7 @@ resource "kubernetes_deployment" "mydeployment" {
       spec {
         container {
           image = "abhishek7389/trailapp:latest"
-          name  = "myapp-helloworld"
+          name  = "myapp-trailapp"
 
           port {
             container_port = 80
@@ -85,6 +82,7 @@ resource "kubernetes_deployment" "mydeployment" {
   }
 }
 
+# Service Configuration
 resource "kubernetes_service" "mydeployment" {
   metadata {
     name = "my-lb"
@@ -94,11 +92,10 @@ resource "kubernetes_service" "mydeployment" {
       App = kubernetes_deployment.mydeployment.spec.0.template.0.metadata[0].labels.App
     }
     port {
-      node_port   = 30201
       port        = 80
       target_port = 80
     }
 
-    type = "NodePort"
+    type = "LoadBalancer"
   }
 }
