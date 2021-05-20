@@ -57,7 +57,7 @@ Note : I'm using terraform version 0.12 but if you're using latest version 0.15 
 
 - $terraform apply
 
-5. For deployment in this cluster you need credentials of cluster
+5. To use kubectl command line tools for this cluster in cloud shell,
 
 - $gcloud container clusters get-credentials $(terraform output -raw kubernetes_cluster_name) --region $(terraform output -raw region)
 
